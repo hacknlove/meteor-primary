@@ -26,7 +26,7 @@ The callbacks receive as parameter a callable that if called, dettaches the call
 
 ### How it works:
 
-Every server insert himself in the _Primary collection with a timestamp
+Every server insert himself in the HacknlovePrimary collection with a timestamp
 
 The one with the oldest Timestamp becomes Primary.
 
