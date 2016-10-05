@@ -34,7 +34,7 @@ Every hearthbeat, the servers update their timestamp.
 
 The Primary set his timestamp in the future (Now + hearthbeat - 1), in order to remain Primary.
 
-So it does change every time a new server is added to the cluster, and we do not want the primary to change randomly in each hearthbeat.
+So it does not change every time a new server is added to the cluster, and we do not want the primary to change randomly in each hearthbeat.
 
 The timestamp olders than `hearthbeat * 4` are cleaned.
 
