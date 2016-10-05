@@ -13,12 +13,12 @@ During the startup they could be both false, until someone is choosen Primary, s
 
 
 ### `Primary.becomePrimary(callback)` and `Primary.becomeSecondary(callback)`
-You can call those as many callbacks as you want, attaching a new callback each time.
+You can call those as many times as you want, attaching a new callback each time.
 
 They returns a function that if called, dettaches callback.
 
 When a new Primary is choosen:
-* The Secondary that becomes Primary, calls becamePrimary callbacks.
+* The Secondary that becomes Primary, calls becomePrimary callbacks.
 * The Primary that becomess Secondary, calls becomeSecondary callbacks.
 * The Secondaries that remains Secondaries, calls nothing.
 
