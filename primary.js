@@ -19,23 +19,31 @@ Primary = {
   onPrimary: function (callback) {
     var key = Meteor.uuid()
     onPrimarys[key] = callback
-    return function () {
+    var offPrimary = function () {
       delete onPrimarys[key]
     }
+    if (Primary.isPrimary) {
+      callback(offPrimary)
+    }
+    return offPrimary
   },
   onSecondarys: function (callback) {
     var key = Meteor.uuid()
     onSecondarys[key] = callback
-    return function () {
+    var offSecondarys = function () {
       delete onSecondarys[key]
     }
+    if (Primary.isSecondary) {
+      callback(offSecondarys)
+    }
+    return offSecondarys
   }
 }
 
 var PrimaryDB = new Mongo.Collection('HacknlovePrimary')
 
-var hearthbeat = 1000
-if (Meteor.settings.private.Primary && Meteor.settings.private.Primary.hearthbeat) {
+var hearthbeat = 5000
+if (Meteor.settings.private && Meteor.settings.private.Primary && Meteor.settings.private.Primary.hearthbeat) {
   hearthbeat = Meteor.settings.private.Primary.hearthbeat
 }
 
@@ -61,10 +69,17 @@ PrimaryDB.find({}, {sort: {timestamp: -1}, limit: 1}).observeChanges({
 })
 
 Meteor.setInterval(function () {
-  PrimaryDB.upsert({serverId: Primary.serverId}, {$set: {
-    serverId: Primary.serverId,
-    timestamp: Date.now() + (Primary.isPrimary ? 0 : (hearthbeat - 1))
-  }})
+  if (Primary.isPrimary) {
+    PrimaryDB.upsert({serverId: Primary.serverId}, {$set: {
+      serverId: Primary.serverId,
+      timestamp: Date.now() + hearthbeat * 1.5
+    }})
+  } else {
+    PrimaryDB.upsert({serverId: Primary.serverId}, {$set: {
+      serverId: Primary.serverId,
+      timestamp: Date.now()
+    }})
+  }
 
   PrimaryDB.remove({timestamp: {$lt: Date.now() - hearthbeat * 4}})
 }, hearthbeat)

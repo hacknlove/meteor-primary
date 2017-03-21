@@ -2,7 +2,7 @@
 
 Package.describe({
   name: 'hacknlove:primary',
-  version: '0.0.5',
+  version: '0.1.0',
   summary: 'Primary, Secondaries, cluster style ',
   git: '',
   documentation: 'README.md'
